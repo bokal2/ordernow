@@ -2,11 +2,18 @@ import json
 import time
 
 from kafka import KafkaProducer
+from configparser import ConfigParser
 
-ORDER_KAFKA_TOPIC = "order_details"
-ORDER_LIMIT = 20
+config = ConfigParser()
 
-PRODUCER = KafkaProducer(bootstrap_servers=["localhost:29092"],)
+config.read("./conf/settings.ini")
+
+KAFKA_BROKER = config.get("KAFKA", "KAFKA_BROKER")
+ORDER_KAFKA_TOPIC = config.get("KAFKA", "ORDER_KAFKA_TOPIC")
+ORDER_LIMIT = int(config.get("KAFKA", "ORDER_LIMIT"))
+
+
+PRODUCER = KafkaProducer(bootstrap_servers=[KAFKA_BROKER],)
 
 class OrderProducer:
     """ Order producer class """
